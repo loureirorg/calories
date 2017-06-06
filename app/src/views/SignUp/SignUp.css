@@ -1,0 +1,14 @@
+.SignUp {
+  background-color: white;
+}
+
+.SignUp .breadcrumb:before {
+  content: '\E5CB';
+}
+
+.SignUp form {
+  background-color: white;
+  padding-top: 40px;
+  padding-bottom: 25px;
+  min-height: calc(80vh - 40px);
+}

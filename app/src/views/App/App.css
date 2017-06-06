@@ -1,0 +1,94 @@
+body {
+  color: #7f8c97;
+  background-color: #e9f0f5;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App span.brand-logo {
+  /*font-family: 'Sue Ellen Francisco', sans-serif !important;*/
+  /*color: #3a3a3a;*/
+  /*text-transform: uppercase;*/
+  font-size: 1.6rem;
+}
+
+.navbar-fixed { z-index: 9998; }
+.modal { z-index: 9999 !important; }
+
+/* Very small screen - title */
+@media only screen and (max-width: 320px) {
+  .App span.brand-logo {
+    font-size: 1.4rem;
+    float: right !important;
+    text-align: right;
+    transform: none;
+    right: 0.5rem;
+    padding: 0;
+    padding-right: 15px;
+    left: auto;
+  }
+}
+
+@media only screen and (min-width: 321px) and (max-width: 600px) {
+  /* Modal should be huge on mobile */
+  .App .container {
+    width: 90% ! important;
+  }
+
+  .App span.brand-logo {
+    font-size: 1.6rem;
+    padding-left: 30px;
+    /*float: right !important;
+    text-align: right;
+    transform: none;
+    right: 0.5rem;
+    padding: 0;
+    padding-right: 20px;
+    left: auto;*/
+  }
+
+  .App .modal {
+    width: 100% !important;
+    max-height: 100% !important;
+    height: 100vh !important;
+    top: 0 !important;
+   }
+}
+
+
+/* ADMIN */
+.admin-table th i.fa {
+  padding-right: 5px;
+}
+
+.admin-table td {
+  padding-left: 15px;
+  cursor: pointer;
+}
+
+.admin-table th {
+  padding-left: 15px;
+  cursor: pointer;
+}
+
+.admin-table th:hover {
+  color: blue;
+}

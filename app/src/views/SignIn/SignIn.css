@@ -1,0 +1,13 @@
+.SignIn {
+  background-color: white;
+}
+
+.SignIn .breadcrumb:before {
+  content: '\E5CB';
+}
+
+.SignIn .lost-password a {
+  color: #039be5;
+  font-style: italic;
+  font-size: 14px;
+}

@@ -1,0 +1,66 @@
+.container {
+  width: 85%;
+}
+
+.main-section {
+  background: #2BA3D4 url('../../images/bg_teaser.svg') no-repeat center center;
+}
+
+.main-section h2 {
+  font-family: 'Sue Ellen Francisco', sans-serif !important;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 50px;
+  line-height: 1.4;
+  margin-bottom: 11px;
+}
+
+.main-section span {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  opacity: 0.75;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.second-section {
+  background: url('../../images/pattern.png') repeat;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.second-section h5 {
+  font-family: 'Sue Ellen Francisco', sans-serif !important;
+  color: #3a3a3a;
+  text-transform: uppercase;
+  font-size: 32px;
+  line-height: 1.3;
+  margin-bottom: 0px;
+}
+
+.second-section p {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #3a3a3a;
+  opacity: 0.85;
+  /*margin: 0;*/
+  font-size: 16px;
+  margin-top: 18px;
+}
+
+.second-section [class^="flaticon-"]:before,
+.second-section [class*=" flaticon-"]:before,
+.second-section [class^="flaticon-"]:after,
+.second-section [class*=" flaticon-"]:after {
+  font-size: 100px;
+  height: 100%;
+  /*margin-left: 0px;*/
+}
+
+/*.second-section [class^="flaticon-"],
+.second-section [class*=" flaticon-"] {
+  background: url('./circle-brush.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  font-size: 120px;
+}*/
