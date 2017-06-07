@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Row, Col, Button } from 'react-materialize';
+import { Button } from 'react-materialize';
 
 // api
 import { changePassword } from '../../reducers';
@@ -35,7 +35,6 @@ class ChangePassword extends Component {
     $('form button').prop('disabled', true);
 
     // api
-    let self = this;
     this.props.changePassword({
       password: this.password.value,
       password_confirmation: this.password_confirmation.value,

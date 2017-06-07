@@ -14,6 +14,8 @@ import ModalSettings from './ModalSettings/ModalSettings';
 import ModalFilter from './ModalFilter/ModalFilter';
 import Dashboard from './Dashboard/Dashboard';
 import AdminUsers from './AdminUsers/AdminUsers';
+import AdminMeals from './AdminMeals/AdminMeals';
+import PageLoading from '../PageLoading/PageLoading';
 
 // assets
 import './App.css';
@@ -31,6 +33,7 @@ class App extends Component {
     this._handleSettingsClick = this._handleSettingsClick.bind(this);
     this._handleFilterClick = this._handleFilterClick.bind(this);
     this._handleSignOutClick = this._handleSignOutClick.bind(this);
+    this._handleNavItemClick = this._handleNavItemClick.bind(this);
   }
 
   _handleAddClick(event) {
@@ -61,9 +64,26 @@ class App extends Component {
     this.props.signOut();
   }
 
+  _handleNavItemClick(event) {
+    window.jQuery(this.button_collapse_nav).sideNav('hide');
+  }
+
   componentWillUnmount() {
+    const { button_collapse_nav } = this.refs;
+    this.button_collapse_nav = button_collapse_nav;
+
     if (this.button_collapse_nav) {
       window.jQuery(this.button_collapse_nav).sideNav('destroy');
+    }
+  }
+
+  componentDidUpdate() {
+    const { button_collapse_nav } = this.refs;
+    this.button_collapse_nav = button_collapse_nav;
+
+    // Not always this component exists
+    if (this.button_collapse_nav) {
+      window.jQuery(this.button_collapse_nav).sideNav();
     }
   }
 
@@ -80,7 +100,34 @@ class App extends Component {
   render() {
     // not logged in
     if (! this.props.user.info) {
+      if (this.props.user.isFetching) {
+        return(<PageLoading />)
+      }
       return (<Redirect to="/" />);
+    }
+
+    // permissions
+    switch (this.props.user.info.role) {
+      case 'USER':
+        if (this.props.location.pathname.startsWith('/admin/')) {
+          return (<Redirect to="/dashboard" />);
+        }
+        break
+
+      case 'MANAGER':
+        if (this.props.location.pathname !== '/admin/users') {
+          return (<Redirect to="/admin/users" />);
+        }
+        break
+
+      case 'ADMIN':
+        if (this.props.location.pathname === '/dashboard') {
+          return (<Redirect to="/admin/users" />);
+        }
+        break
+
+      default:
+        break;
     }
 
     let modal_add_html = '';
@@ -103,6 +150,7 @@ class App extends Component {
       modal_filter_html = <ModalFilter key="modal-filter" />;
     }
 
+    // generic progress bar
     let loading_html = '';
     if ((this.props.user.isFetching) || (this.props.meals.isFetching)) {
       loading_html = (
@@ -111,27 +159,36 @@ class App extends Component {
         </div>);
     }
 
-    // only displays calories on dashboard page
+    // title changes according page
     let title_html = '';
-    if (this.props.location.pathname === '/dashboard') {
-      let sum = 0; // calories
-      let today_meals = this.props.meals.info[moment().format('YYYY-MM-DD')];
-      if (today_meals) {
-        today_meals.meals.forEach(function(num) { sum += parseInt(num[2], 10) || 0 })
-      }
-      title_html = (<span className="brand-logo center"><b>{sum.toLocaleString()}</b> calories out of <b>{this.props.user.info.daily_calories_max.toLocaleString()}</b></span>);
-    }
-    else {
-      if (this.props.location.pathname === '/admin/users') {
-        title_html = (<span className="brand-logo center"><b>Users</b></span>);
-      }
+    switch (this.props.location.pathname) {
+    case '/dashboard':
+         let sum = 0; // calories
+         let today_meals = this.props.meals.info[moment().format('YYYY-MM-DD')];
+         if (today_meals) {
+           today_meals.meals.forEach(function(num) { sum += parseInt(num[2], 10) || 0 })
+         }
+         title_html = (<span className="brand-logo center"><b>{sum.toLocaleString()}</b> calories out of <b>{this.props.user.info.daily_calories_max.toLocaleString()}</b></span>);
+         break;
 
-      // if (this.props.user.info.role === 'MANAGER') {
-      //   title_html = (<span className="brand-logo center"><b>Management</b></span>);
-      // }
-      // else if (this.props.user.info.role === 'ADMIN') {
-      //   title_html = (<span className="brand-logo center"><b>Administration</b></span>);
-      // }
+    case '/admin/users':
+         title_html = (<span className="brand-logo center"><b>Users</b></span>);
+         break;
+
+    case '/admin/managers':
+         title_html = (<span className="brand-logo center"><b>Managers</b></span>);
+         break;
+
+    case '/admin/admins':
+         title_html = (<span className="brand-logo center"><b>Administrators</b></span>);
+         break;
+
+    case '/admin/meals':
+         title_html = (<span className="brand-logo center"><b>Meals</b></span>);
+         break;
+
+    default:
+         break;
     }
 
     // menu changes according role
@@ -139,27 +196,23 @@ class App extends Component {
     menu_options_html.push(
       <li key="mi_1"><div className="userView">
         <div className="background blue"></div>
-        <a href="#" className="center" style={{display: 'inline-flex'}}><img className="circle center" src={defaultUserImage} /></a>
-        <a href="#"><span className="white-text name">{this.props.user.info.name}</span></a>
-        <a href="#"><span className="white-text email">{this.props.user.info.email}</span></a>
+        <div className="center" style={{display: 'inline-flex'}}><img className="circle center" src={defaultUserImage} alt="" /></div>
+        <div><span className="white-text name">{this.props.user.info.name}</span></div>
+        <div><span className="white-text email">{this.props.user.info.email}</span></div>
       </div></li>
     );
 
     if (this.props.user.info.role === 'USER') {
       menu_options_html.push(<li key="mi_2"><Link to="/filter" onClick={this._handleFilterClick}>Filter</Link></li>);
       menu_options_html.push(<li key="mi_3"><Link to="/settings" onClick={this._handleSettingsClick}>Settings</Link></li>);
-      menu_options_html.push(<li key="mi_4"><Link to="/logout" onClick={this._handleSignOutClick}>Logout</Link></li>);
     }
     else {
       if (this.props.user.info.role === 'ADMIN') {
-        menu_options_html.push(<li key="mi_5"><a className="waves-effect" href="#!">Administrators</a></li>);
-        menu_options_html.push(<li key="mi_6"><a className="waves-effect" href="#!">Managers</a></li>);
-        menu_options_html.push(<li key="mi_7"><a className="waves-effect" href="#!">Meals</a></li>);
+        menu_options_html.push(<li key="mi_7"><Link to="/admin/meals" onClick={this._handleNavItemClick}>Meals</Link></li>);
       }
-
-      menu_options_html.push(<li key="mi_8"><a className="waves-effect" href="#!">Users</a></li>);
-      menu_options_html.push(<li key="mi_9"><Link to="/logout" onClick={this._handleSignOutClick}>Logout</Link></li>);
+      menu_options_html.push(<li key="mi_8"><Link to="/admin/users" onClick={this._handleNavItemClick}>Users</Link></li>);
     }
+    menu_options_html.push(<li key="mi_9"><Link to="/logout" onClick={this._handleSignOutClick}>Logout</Link></li>);
 
     return (
 <div className="App">
@@ -179,7 +232,7 @@ class App extends Component {
             <SideNavItem className="left"><i className="material-icons left">search</i> Settings</SideNavItem>
             <SideNavItem href="/" className="left"><i className="material-icons left">search</i> Logout</SideNavItem>
           </SideNav> */}
-          <a href="#" data-activates="slide-out" className="left button-collapse-nav" ref="button_collapse_nav" style={{paddingLeft: '24px'}}><i className="material-icons">menu</i></a>
+          <div data-activates="slide-out" className="left button-collapse-nav" ref="button_collapse_nav" style={{paddingLeft: '24px', cursor: 'pointer'}}><i className="material-icons">menu</i></div>
           <ul id="slide-out" className="side-nav">
             {menu_options_html}
           </ul>
@@ -191,6 +244,10 @@ class App extends Component {
     <Switch>
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/admin/users" component={AdminUsers} />
+      <Route path="/admin/managers" component={AdminUsers} />
+      <Route path="/admin/admins" component={AdminUsers} />
+      <Route path="/admin/meals" component={AdminMeals} />
+      <Redirect to="/404-not-found" />
     </Switch>
 
     <div className="fixed-action-btn hide-on-med-and-up">
@@ -204,9 +261,7 @@ class App extends Component {
     {modal_add_user_html}
     {modal_settings_html}
     {modal_filter_html}
-
   </div>
-
 </div>
     );
   }

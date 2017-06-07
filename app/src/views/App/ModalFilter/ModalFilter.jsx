@@ -8,7 +8,6 @@ import { mealFilter } from '../../../reducers';
 
 // libs
 import $ from 'jquery';
-import moment from 'moment';
 
 class ModalFilter extends Component {
 

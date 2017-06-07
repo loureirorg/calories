@@ -8,7 +8,6 @@ import { userUpdate } from '../../../reducers'
 
 // libs
 import $ from 'jquery';
-import moment from 'moment';
 
 //
 const KEEP_SAME_PASS = '******';

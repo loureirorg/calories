@@ -16,16 +16,17 @@ import './index.css';
 import {
   reducerModalAdd,
   reducerModalEdit,
-  reducerModalEditUser,
   reducerModalLostPassword,
   reducerUser,
-  reducerUsers,
-  reducerAdminUser,
   reducerMeals,
+  reducerAdminUser,
+  reducerAdminUsers,
+  reducerAdminMeals,
   reducerSettings,
   reducerFilter,
   reducerFilterDialog,
   reducerModalAddUser,
+  reducerModalEditUser,
 
   userFetch
 } from './reducers';
@@ -51,8 +52,9 @@ let store = createStore(
     modal_filter: reducerFilter,
     modal_lost_password: reducerModalLostPassword,
     user: reducerUser,
-    users: reducerUsers,
     admin_user: reducerAdminUser,
+    admin_users: reducerAdminUsers,
+    admin_meals: reducerAdminMeals,
     meals: reducerMeals,
     filter_dialog: reducerFilterDialog,
   }),
@@ -94,8 +96,8 @@ ReactDOM.render((
         <Route path="/sign-up" component={SignUp} />
         <Route path="/lost-password" component={LostPassword} />
         <Route path="/change-password" component={ChangePassword} />
+        <Route path="/404-not-found" component={Page404} />
         <Route path="/" component={App} />
-        <Route path="/" component={Page404} />
       </Switch>
     </Router>
   </Provider>

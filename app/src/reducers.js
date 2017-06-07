@@ -75,7 +75,7 @@ function reducerFilter(state = {opened: false, args: {}}, action) {
 function reducerModalEdit(state = false, action) {
   switch (action.type) {
   case 'MODAL_EDIT_OPEN':
-    return {id: action.id, cal: action.cal, title: action.title, date: action.date, time: action.time}
+    return Object.assign({}, action.info);
   case 'MODAL_EDIT_CLOSE':
     return false
   default:
@@ -87,7 +87,7 @@ function reducerModalEdit(state = false, action) {
 export function reducerModalEditUser(state = false, action) {
   switch (action.type) {
   case 'MODAL_EDIT_USER_OPEN':
-    return {id: action.id, name: action.name, email: action.email, daily_calories_max: action.daily_calories_max}
+    return Object.assign({}, action.info);
   case 'MODAL_EDIT_USER_CLOSE':
     return false
   default:
@@ -434,6 +434,73 @@ export function mealFilter(date_from, date_to, time_from, time_to) {
 /* ADMIN   */
 /***********/
 
+export function reducerAdminMeals(state = {
+  isFetching: false,
+  info: false,
+  error: false,
+  args: {orderBy: 'date', orderDir: +1, keyword: ''}
+}, action) {
+
+  switch (action.type) {
+  case ADMIN_MEAL_LIST_REQUEST:
+    return Object.assign({}, state, {
+      isFetching: 'LIST',
+      error: false,
+      args: Object.assign({}, state.args, action.args)
+    })
+
+  case ADMIN_MEAL_LIST_RECEIVE:
+    if (action.ajaxReturn['error']) {
+      return Object.assign({}, state, {
+        isFetching: false,
+        error: action.ajaxReturn['error']
+      })
+    }
+
+    return Object.assign({}, state, {
+      isFetching: false,
+      info: action.ajaxReturn,
+    })
+
+  default:
+    return state
+  }
+}
+
+const ADMIN_MEAL_LIST_REQUEST = 'ADMIN_MEAL_LIST_REQUEST';
+function requestAdminMealList() {
+  return {
+    type: ADMIN_MEAL_LIST_REQUEST
+  }
+}
+
+const ADMIN_MEAL_LIST_RECEIVE = 'ADMIN_MEAL_LIST_RECEIVE';
+function receiveAdminMealList(ajaxReturn) {
+  return {
+    type: ADMIN_MEAL_LIST_RECEIVE,
+    ajaxReturn: ajaxReturn
+  }
+}
+
+/* Ex.: adminMealList() */
+export function adminMealList() {
+  return function (dispatch) {
+    dispatch(requestAdminMealList());
+
+    return fetch(window.api_url + '/admin/meals', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(json => dispatch(receiveAdminMealList(json)));
+  }
+}
+
+
 export function reducerAdminUser(state = {
   isFetching: false,
   info: false,
@@ -475,7 +542,6 @@ export function reducerAdminUser(state = {
     })
 
   case ADMIN_USER_UPDATE_RECEIVE:
-  console.log(action.ajaxReturn);
     if (action.ajaxReturn['errors']) {
       return Object.assign({}, state, {
         isFetching: false,
@@ -629,7 +695,7 @@ export function adminUserDelete(info) {
 /* USER    */
 /***********/
 
-export function reducerUsers(state = {
+export function reducerAdminUsers(state = {
   isFetching: false,
   info: false,
   error: false,
@@ -637,17 +703,14 @@ export function reducerUsers(state = {
 }, action) {
 
   switch (action.type) {
-  case USER_LIST_STATUS:
-    return Object.assign({}, state)
-
-  case USER_LIST_REQUEST:
+  case ADMIN_USER_LIST_REQUEST:
     return Object.assign({}, state, {
       isFetching: 'LIST',
       error: false,
       args: Object.assign({}, state.args, action.args)
     })
 
-  case USER_LIST_RECEIVE:
+  case ADMIN_USER_LIST_RECEIVE:
     if (action.ajaxReturn['error']) {
       return Object.assign({}, state, {
         isFetching: false,
@@ -1077,28 +1140,26 @@ export function changePassword(userInfo) {
 }
 
 
-const USER_LIST_REQUEST = 'USER_LIST_REQUEST';
-function requestUserList(args) {
+const ADMIN_USER_LIST_REQUEST = 'ADMIN_USER_LIST_REQUEST';
+function requestAdminUserList(args) {
   return {
-    type: USER_LIST_REQUEST,
+    type: ADMIN_USER_LIST_REQUEST,
     args: args
   }
 }
 
-const USER_LIST_RECEIVE = 'USER_LIST_RECEIVE';
-function receiveUserList(ajaxReturn) {
+const ADMIN_USER_LIST_RECEIVE = 'ADMIN_USER_LIST_RECEIVE';
+function receiveAdminUserList(ajaxReturn) {
   return {
-    type: USER_LIST_RECEIVE,
+    type: ADMIN_USER_LIST_RECEIVE,
     ajaxReturn: ajaxReturn
   }
 }
 
-/* Ex.: userList() */
-const USER_LIST_STATUS = 'USER_LIST_STATUS';
-export function userList(state, args={}) {
+/* Ex.: adminUserList() */
+export function adminUserList(state, args={}) {
   return function (dispatch) {
-    dispatch(requestUserList(args));
-
+    dispatch(requestAdminUserList(args));
 
     // args
     args = Object.assign({}, state.args, args);
@@ -1118,7 +1179,7 @@ export function userList(state, args={}) {
         },
       })
       .then(response => response.json())
-      .then(json => dispatch(receiveUserList(json)));
+      .then(json => dispatch(receiveAdminUserList(json)));
   }
 }
 

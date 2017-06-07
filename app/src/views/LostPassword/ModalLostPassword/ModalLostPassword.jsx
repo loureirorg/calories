@@ -4,7 +4,6 @@ import { Button } from 'react-materialize';
 
 // libs
 import $ from 'jquery';
-import moment from 'moment';
 
 class ModalLostPassword extends Component {
 

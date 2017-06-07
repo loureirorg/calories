@@ -41,7 +41,7 @@ class Home extends Component {
         </div>
 
         <div className="col hide-on-small-only m4 right-align">
-          <img src={iphoneWhite} className="responsive-img" alt="descriptive image (iphone)" />
+          <img src={iphoneWhite} className="responsive-img" alt="" />
         </div>
       </div>
 

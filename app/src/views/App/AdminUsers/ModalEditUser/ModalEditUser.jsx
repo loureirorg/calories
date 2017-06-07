@@ -1,10 +1,10 @@
 // core
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-materialize';
+import { Button, Input } from 'react-materialize';
 
 // api
-import { userList, adminUserDelete, adminUserUpdate } from '../../../../reducers';
+import { adminUserList, adminUserDelete, adminUserUpdate } from '../../../../reducers';
 
 // libs
 import $ from 'jquery';
@@ -21,12 +21,14 @@ class ModalEditUser extends Component {
     this._handleCancel = this._handleCancel.bind(this);
     this._handleDelete = this._handleDelete.bind(this);
     this._handleUpdate = this._handleUpdate.bind(this);
+    this._handleRoleChange = this._handleRoleChange.bind(this);
   }
 
   componentDidMount() {
     const { modal_edit } = this.refs;
-    const { select_role } = this.refs;
     this.modal_edit = modal_edit;
+
+    this.role = this.props.role;
 
     let self = this;
 
@@ -40,7 +42,6 @@ class ModalEditUser extends Component {
       }
     });
     window.jQuery(this.modal_edit).modal('open');
-    window.jQuery(this.role).material_select();
   }
 
   componentWillUnmount() {
@@ -60,7 +61,7 @@ class ModalEditUser extends Component {
       id: this.props.record_id
     })
     .then(function (info) {
-      self.props.userList(self.props.users, {});
+      self.props.adminUserList(self.props.admin_users, {});
       self.props.modalEditUserClose();
     })
   }
@@ -72,16 +73,13 @@ class ModalEditUser extends Component {
       id: this.props.record_id,
       name: this.name.value,
       email: this.email.value,
-      daily_calories_max: this.daily_calories_max.value
+      daily_calories_max: this.daily_calories_max.value,
+      role: this.role
     };
 
     if (this.password.value !== KEEP_SAME_PASS) {
       info.password = this.password.value;
       info.password_confirmation = this.password.value;
-    }
-
-    if (this.role.value) {
-      info.role = this.role.value;
     }
 
     let self = this;
@@ -93,33 +91,34 @@ class ModalEditUser extends Component {
       else if (self.props.admin_user.errors) {
       }
       else {
-        self.props.userList(self.props.users, {});
+        self.props.adminUserList(self.props.admin_users, {});
         self.props.modalEditUserClose();
       }
     })
+  }
+
+  _handleRoleChange(event) {
+    this.role = event.target.value;
   }
 
   render() {
     let errors = this.props.admin_user.errors;
 
     let input_role_html = '';
-    let selected;
-    if (this.role) selected = this.role.value || this.props.role;
-    else selected = this.props.role;
 
     if (this.props.user.info.role === 'ADMIN') {
       input_role_html = (
-<div className="row">
-  <div className="input-field col s12 m6">
-    <select defaultValue={selected} ref={(input) => this.role = input}>
-      <option value="USER">User</option>
-      <option value="MANAGER">Manager</option>
-      <option value="ADMIN">Administrator</option>
-    </select>
-    <label htmlFor="txt-role" data-error={"Role " + errors['role']} className="active">Role</label>
-  </div>
-</div>
-    )}
+        <Input s={12} m={6}
+               type='select'
+               label="Role"
+               defaultValue={this.props.role}
+               error={errors['role'] ? "Role " + errors['role'] : ''}
+               onChange={this._handleRoleChange}>
+          <option value='USER'>Users</option>
+          <option value='MANAGER'>Managers</option>
+          <option value='ADMIN'>Admins</option>
+        </Input>)
+    }
 
     return(
 <div id="modal-edit" ref="modal_edit" className="modal modal-fixed-footer">
@@ -162,16 +161,16 @@ class ModalEditUser extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    users: state.users,
+    admin_user: state.admin_user,
+    admin_users: state.admin_users,
     modal_edit: state.modal_edit_user,
-    admin_user: state.admin_user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     modalEditUserClose: () => dispatch({type: 'MODAL_EDIT_USER_CLOSE'}),
-    userList: (state, args) => dispatch(userList(state, args)),
+    adminUserList: (state, args) => dispatch(adminUserList(state, args)),
     adminUserUpdate: (info) => dispatch(adminUserUpdate(info)),
     adminUserDelete: (info) => dispatch(adminUserDelete(info)),
   }

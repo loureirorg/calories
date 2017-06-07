@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Row, Col, Button, Materialize } from 'react-materialize';
+import { Button } from 'react-materialize';
 
 // api
 import { signIn } from  '../../reducers';

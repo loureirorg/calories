@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-materialize';
 
 // api
-import { mealUpdate, mealDelete, mealList } from '../../../../reducers';
+import { mealUpdate, mealDelete, mealList } from '../../../reducers';
 
 // libs
 import $ from 'jquery';

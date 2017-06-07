@@ -1,22 +1,19 @@
 // core
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 // assets
-import './Page404.css';
+import './PageLoading.css';
 
 export default class NotFound extends Component {
 
   render() {
     return (
-<div className="NotFound">
+<div className="PageLoading">
   <div className="container">
     <div className="valign-wrapper" style={{minHeight: '65vh'}}>
       <div className="row center" style={{width: '100%'}}>
         <div className="col s12">
-          <h1>404</h1>
-          <h2>Page not found :(</h2>
-          <Link to="/">Go to the Main Page</Link>
+          {/* <h2>Loading ...</h2> */}
         </div>
       </div>
     </div>

@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { Button } from 'react-materialize';
 
 // api
-import { adminUserCreate, userList } from '../../../reducers';
+import { adminUserCreate, adminUserList } from '../../../reducers';
 
 // libs
 import $ from 'jquery';
-import moment from 'moment';
 
 class ModalAddUser extends Component {
 
@@ -64,7 +63,7 @@ class ModalAddUser extends Component {
       else if (self.props.admin_user.errors) {
       }
       else {
-        self.props.userList(self.props.users, {});
+        self.props.adminUserList(self.props.admin_users, {});
         self.props.modalAddUserClose();
       }
     })
@@ -131,17 +130,17 @@ class ModalAddUser extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    modal_add: state.modal_add_user,
-    users: state.users,
     user: state.user,
-    admin_user: state.admin_user
+    admin_user: state.admin_user,
+    admin_users: state.admin_users,
+    modal_add: state.modal_add_user,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     modalAddUserClose: () => dispatch({type: 'MODAL_ADD_USER_CLOSE'}),
-    userList: (state, args) => dispatch(userList(state, args)),
+    adminUserList: (state, args) => dispatch(adminUserList(state, args)),
     adminUserCreate: (info) => dispatch(adminUserCreate(info)),
   }
 }

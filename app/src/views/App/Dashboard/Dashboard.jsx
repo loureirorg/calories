@@ -7,14 +7,14 @@ import { mealList } from '../../../reducers';
 // assets
 import './Dashboard.css';
 import iconPicture from '../../../images/cd-icon-picture.svg';
-import iconMovie from '../../../images/cd-icon-movie.svg';
+// import iconMovie from '../../../images/cd-icon-movie.svg';
 
 // libs
 import $ from 'jquery';
 import moment from 'moment';
 
 // components
-import ModalEdit from './ModalEdit/ModalEdit';
+import ModalEdit from '../ModalEdit/ModalEdit';
 
 
 class Dashboard extends Component {
@@ -55,13 +55,13 @@ class Dashboard extends Component {
     event.preventDefault();
 
     let row = $(event.target.closest('.row'));
-    this.props.modalEditOpen(
-      row.attr('data-id'),
-      row.attr('data-cal'),
-      row.attr('data-title'),
-      row.attr('data-date'),
-      row.attr('data-time')
-    );
+    this.props.modalEditOpen({
+      id: row.attr('data-id'),
+      cal: row.attr('data-cal'),
+      title: row.attr('data-title'),
+      date: row.attr('data-date'),
+      time: row.attr('data-time')
+    });
   }
 
   _closeFilterDialog(event) {
@@ -184,7 +184,7 @@ class Dashboard extends Component {
       meals_html.push(
         <div key={key} className="cd-timeline-block">
           <div className={"cd-timeline-img " + red_green}>
-            <img src={iconPicture} alt="Picture" />
+            <img src={iconPicture} alt="" />
           </div>
 
           <div className="cd-timeline-content">
@@ -250,7 +250,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    modalEditOpen: (id, cal, title, date, time) => dispatch({type: 'MODAL_EDIT_OPEN', id: id, cal: cal, title: title, date: date, time: time}),
+    modalEditOpen: (info) => dispatch({type: 'MODAL_EDIT_OPEN', info: info}),
     mealList: () => dispatch(mealList()),
     filterDialogClose: () => dispatch({type: 'FILTER_DIALOG_CLOSE'})
   }

@@ -1,0 +1,18 @@
+.PageLoading h1 {
+  font-size: 12rem;
+  color: black;
+  opacity: 0.7;
+}
+
+.PageLoading h2 {
+  font-size: 3rem;
+  color: black;
+  opacity: 0.5;
+}
+
+.PageLoading a {
+  color: darkblue;
+  font-style: italic;
+  text-decoration: underline;
+  cursor: hand;
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Row, Col, Button } from 'react-materialize';
+import { Button } from 'react-materialize';
 
 // sub-pages / components
 import ModalLostPassword from './ModalLostPassword/ModalLostPassword';

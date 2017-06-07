@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   }
 
   scope :admin do
+    get 'meals', to: 'admins#meal_index'
     get 'users', to: 'admins#user_index'
     get 'users/:id', to: 'admins#user_show'
     put 'users/:id', to: 'admins#user_update'

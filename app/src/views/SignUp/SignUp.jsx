@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Row, Col, Button } from 'react-materialize';
+import { Button } from 'react-materialize';
 
 // api
 import { signUp } from  '../../reducers';
@@ -82,14 +82,7 @@ class SignUp extends Component {
       <form onSubmit={this._handleSignUpSubmit} style={{width: '100%'}}>
         <div className="row">
           <div className="input-field col s12 m6 offset-m3">
-            <input id="txt-name" type="text" autoFocus="true" className={"validate " + (errors['name'] ? "invalid" : "")} ref={(input) => this.name = input} />
-            <label htmlFor="txt-name" data-error={"Name " + errors['name']} className="active">Name</label>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="input-field col s12 m6 offset-m3">
-            <input id="txt-email" type="email" className={"validate " + (errors['email'] ? "invalid" : "")} ref={(input) => this.email = input} />
+            <input id="txt-email" type="email" autoFocus="true" className={"validate " + (errors['email'] ? "invalid" : "")} ref={(input) => this.email = input} />
             <label htmlFor="txt-email" data-error={"E-mail " + errors['email']}>E-mail</label>
           </div>
         </div>
@@ -107,6 +100,13 @@ class SignUp extends Component {
             <label htmlFor="txt-confirm-password">Confirm Password</label>
           </div>
         </div> */}
+
+        <div className="row">
+          <div className="input-field col s12 m6 offset-m3">
+            <input id="txt-name" type="text" className={"validate " + (errors['name'] ? "invalid" : "")} ref={(input) => this.name = input} />
+            <label htmlFor="txt-name" data-error={"Name " + errors['name']} className="active">Name</label>
+          </div>
+        </div>
 
         <div className="row">
           <div className="col s12 m4 offset-m4" style={{paddingBottom: '15px', paddingTop: '30px'}}>

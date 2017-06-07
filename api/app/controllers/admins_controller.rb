@@ -1,8 +1,25 @@
 # Admin / Manager actions
 class AdminsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authenticate_role!
+  before_action :authenticate_role!, except: [:meal_index]
   before_action :set_user, only: [:user_show, :user_update, :user_destroy]
+
+  def meal_index
+    @meals = Meal.all
+
+    # filter
+    @meals = @meals.search_for(params[:keyword]) if params[:keyword]
+
+    # sort by
+    params['order-dir'] ||= 1
+    order_dir = params['order-dir'] == '1' ? :asc : :desc
+    @meals = @meals.order(params['order-by'] => order_dir) if params['order-by']
+
+    # limit
+    @meals = @meals.limit(100)
+
+    render json: @meals
+  end
 
   def user_index
     @users = User.all
