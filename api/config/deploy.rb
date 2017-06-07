@@ -2,7 +2,7 @@
 lock '3.8.1'
 
 set :application, 'toptal-calories'
-set :repo_url, 'git@gitlab.com:loureirorg/toptal-calories.git'
+set :repo_url, 'git@gitlab.com:loureirorg/calories.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
