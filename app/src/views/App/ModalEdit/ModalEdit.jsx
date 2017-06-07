@@ -64,11 +64,11 @@ class ModalEdit extends Component {
       id: this.props.record_id
     })
     .then(function (info) {
-      if (self.props.location.pathname === '/dashboard') {
-        self.props.mealList();
+      if ((self.props.location) && (self.props.location.pathname.startsWith('/admin/'))) {
+        self.props.adminMealList(self.props.admin_meals, {});
       }
       else {
-        self.props.adminMealList(self.props.admin_meals, {});
+        self.props.mealList();
       }
       self.props.modalEditClose();
     })
@@ -86,11 +86,11 @@ class ModalEdit extends Component {
       eat_time: this.time.value
     })
     .then(function (info) {
-      if (self.props.location.pathname === '/dashboard') {
-        self.props.mealList();
+      if ((self.props.location) && (self.props.location.pathname.startsWith('/admin/'))) {
+        self.props.adminMealList(self.props.admin_meals, {});
       }
       else {
-        self.props.adminMealList(self.props.admin_meals, {});
+        self.props.mealList();
       }
       self.props.modalEditClose();
     })
@@ -99,7 +99,7 @@ class ModalEdit extends Component {
   render() {
     // admin interface has user information
     let user_info_html = '';
-    if (this.props.location.pathname.startsWith('/admin/')) {
+    if ((this.props.location) && (this.props.location.pathname.startsWith('/admin/'))) {
       user_info_html = (
         <div className="row">
           <div className="input-field col s12 m6">
