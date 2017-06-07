@@ -3,7 +3,7 @@ class MealsController < ApplicationController
   before_action :set_meal, only: [:show, :update, :destroy]
 
   def index
-    query = current_user.meals
+    query = current_user.meals.includes(:user)
 
     # filter
     query = query.where('eat_date >= ?', params['date-from']) if params['date-from']
@@ -66,8 +66,11 @@ class MealsController < ApplicationController
   end
 
   def set_meal
-    @meal = Meal.find_by(id: params[:id], user: current_user)
-    render json: { error: 'Meal not found' }, status: :not_found if @meal.nil?
+    @meal = Meal.find_by(id: params[:id])
+
+    # only current_user or ADMIN can CRUD it
+    return if (@meal.user == current_user) || (current_user.role == 'ADMIN')
+    render json: { error: 'Meal not found' }, status: :not_found
   end
 
 end

@@ -9,6 +9,15 @@ class Meal < ApplicationRecord
   validate :time_cannot_be_invalid,
            :date_cannot_be_in_the_future
 
+  # searchable
+  include PgSearch
+  pg_search_scope :search_for,
+                  against: [:title],
+                  using: { tsearch: { prefix: true, any_word: true } },
+                  associated_against: {
+                    user: [:name, :email]
+                  }
+
   private
 
   def date_cannot_be_in_the_future
@@ -27,8 +36,16 @@ class Meal < ApplicationRecord
 end
 
 class MealSerializer < ActiveModel::Serializer
-  attributes :id,
-             :user_id, :title, :calories, :eat_date, :eat_time
-
   # belongs_to :user
+  attributes :id,
+             :user_id, :title, :calories, :eat_date, :eat_time,
+             :user_name, :user_email
+
+  def user_name
+    object.user.try(:name)
+  end
+
+  def user_email
+    object.user.try(:email)
+  end
 end

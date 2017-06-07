@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user do
     name { Faker::Name.name }
     email { Faker::Internet.email }
-    daily_calories_max { Faker::Number.between(9, 22) * 100}
+    daily_calories_max { Faker::Number.between(9, 22) * 100 }
     password 'password'
     role 'USER'
 
@@ -25,7 +25,7 @@ FactoryGirl.define do
     title { Faker::Food.ingredient }
     calories { Faker::Number.between(10, 220) * 5 }
     eat_date { Faker::Date.between(7.days.ago, 1.day.ago).to_s }
-    eat_time { Faker::Time.between(DateTime.now - 1, DateTime.now).to_s[11,5] }
+    eat_time { Faker::Time.between(Time.zone.now - 1.day, Time.zone.now).to_s[11, 5] }
 
     user
   end

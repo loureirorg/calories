@@ -57,6 +57,8 @@ class AdminMeals extends Component {
       title: tr.attr('data-title'),
       date: tr.attr('data-date'),
       time: tr.attr('data-time'),
+      user_name: tr.attr('data-user_name'),
+      user_email: tr.attr('data-user_email'),
     });
   }
 
@@ -67,17 +69,19 @@ class AdminMeals extends Component {
     let modal_edit_html = '';
     if (this.props.modal_edit) {
       let modal_edit = this.props.modal_edit;
-      modal_edit_html = <ModalEdit key="-1" record_id={modal_edit.id} cal={modal_edit.cal} date={modal_edit.date} time={modal_edit.time} title={modal_edit.title} />;
+      modal_edit_html = <ModalEdit key="-1" location={this.props.location} record_id={modal_edit.id} cal={modal_edit.cal} date={modal_edit.date} time={modal_edit.time} title={modal_edit.title} user_name={modal_edit.user_name} user_email={modal_edit.user_email} />;
     }
 
     // render API data
     let meals_html = [];
     $.each(this.props.admin_meals.info, function(key, value) {
-      meals_html.push(<tr key={'admin_meal_' + key} data-id={value.id} data-cal={value.calories} data-date={value.eat_date} data-time={value.eat_time} data-title={value.title} onClick={self._handleEditClick}>
+      meals_html.push(<tr key={'admin_meal_' + key} data-id={value.id} data-cal={value.calories} data-date={value.eat_date} data-time={value.eat_time} data-title={value.title} data-user_name={value.user_name} data-user_email={value.user_email} onClick={self._handleEditClick}>
         <td>{value.eat_date}</td>
         <td>{value.eat_time}</td>
         <td>{value.title}</td>
         <td>{value.calories}</td>
+        <td>{value.user_name}</td>
+        <td>{value.user_email}</td>
       </tr>);
     });
 
@@ -110,10 +114,12 @@ class AdminMeals extends Component {
       <table style={{backgroundColor: 'white'}} className="striped responsive-table admin-table">
         <thead>
           <tr>
-            <th data-column='date' onClick={this._sortTableClick}>{sort_html['date']} Date</th>
-            <th data-column='time' onClick={this._sortTableClick}>{sort_html['time']} Time</th>
+            <th data-column='eat_date' onClick={this._sortTableClick}>{sort_html['eat_date']} Date</th>
+            <th data-column='eat_time' onClick={this._sortTableClick}>{sort_html['eat_time']} Time</th>
             <th data-column='title' onClick={this._sortTableClick}>{sort_html['title']}Title</th>
             <th data-column='calories' onClick={this._sortTableClick}>{sort_html['calories']}Calories</th>
+            <th data-column='users.name' onClick={this._sortTableClick}>{sort_html['users.name']}User</th>
+            <th data-column='users.email' onClick={this._sortTableClick}>{sort_html['users.email']}Email</th>
           </tr>
         </thead>
         <tbody>

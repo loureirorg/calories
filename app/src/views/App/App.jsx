@@ -150,6 +150,24 @@ class App extends Component {
       modal_filter_html = <ModalFilter key="modal-filter" />;
     }
 
+    // Meals admin has no 'add' button
+    let add_button_menu_html = '';
+    let add_button_mobile_html = '';
+    if (this.props.location.pathname !== '/admin/meals') {
+      add_button_menu_html = (
+        <ul className="right hide-on-small-only" style={{paddingRight: '24px'}}>
+          <li><Button onClick={this._handleAddClick} className="btn waves-effect waves-light orange">Add</Button></li>
+        </ul>
+      );
+      add_button_mobile_html = (
+        <div className="fixed-action-btn hide-on-med-and-up">
+          <Link className="btn-floating btn-large red" to="#" onClick={this._handleAddClick}>
+            <i className="large material-icons">add</i>
+          </Link>
+        </div>
+      );
+    }
+
     // generic progress bar
     let loading_html = '';
     if ((this.props.user.isFetching) || (this.props.meals.isFetching)) {
@@ -222,16 +240,7 @@ class App extends Component {
       <nav style={{backgroundColor: '#0172FF'}}>
         <div className="nav-wrapper">
           {title_html}
-          <ul className="right hide-on-small-only" style={{paddingRight: '24px'}}>
-            <li><Button onClick={this._handleAddClick} className="btn waves-effect waves-light orange">Add</Button></li>
-          </ul>
-
-          {/* MOBILE MENU */}
-          {/* <SideNav trigger={<a href="#" className="left" style={{paddingLeft: '24px'}}><i className="material-icons">menu</i></a>} options={{ closeOnClick: true }}>
-            <SideNavItem className="left"><i className="material-icons left">search</i> Filter</SideNavItem>
-            <SideNavItem className="left"><i className="material-icons left">search</i> Settings</SideNavItem>
-            <SideNavItem href="/" className="left"><i className="material-icons left">search</i> Logout</SideNavItem>
-          </SideNav> */}
+          {add_button_menu_html}
           <div data-activates="slide-out" className="left button-collapse-nav" ref="button_collapse_nav" style={{paddingLeft: '24px', cursor: 'pointer'}}><i className="material-icons">menu</i></div>
           <ul id="slide-out" className="side-nav">
             {menu_options_html}
@@ -250,11 +259,7 @@ class App extends Component {
       <Redirect to="/404-not-found" />
     </Switch>
 
-    <div className="fixed-action-btn hide-on-med-and-up">
-      <Link className="btn-floating btn-large red" to="#" onClick={this._handleAddClick}>
-        <i className="large material-icons">add</i>
-      </Link>
-    </div>
+    {add_button_mobile_html}
 
     {/* MODALS */}
     {modal_add_html}

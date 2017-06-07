@@ -1,7 +1,7 @@
 module UserHelpers
   def successful_sign_up
     user = FactoryGirl.build(:user)
-    params = {user: {email: user.email, name: user.name, password: user.password}}.as_json
+    params = { user: { email: user.email, name: user.name, password: user.password } }.as_json
     post '/users', params: params, as: :json
     expect(response).to be_success
 
@@ -9,7 +9,7 @@ module UserHelpers
   end
 
   def successful_sign_in(user)
-    params = {user: {email: user.email, password: user.password}}
+    params = { user: { email: user.email, password: user.password } }
     post '/users/sign_in', params: params, as: :json
     expect(response).to be_success
   end

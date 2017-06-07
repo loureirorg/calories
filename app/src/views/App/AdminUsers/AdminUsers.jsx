@@ -8,6 +8,7 @@ import { adminUserList } from '../../../reducers';
 
 // assets
 import './AdminUsers.css';
+import '../../../fonts/font-awesome/css/font-awesome.css';
 
 // libs
 import $ from 'jquery';
@@ -119,27 +120,46 @@ class AdminUsers extends Component {
     };
     sort_html[this.props.admin_users.args.orderBy] = direction_html;
 
+    // search bar: ADMIN has a "role" input
+    let search_bar_html = '';
+    if (this.props.user.info.role === 'ADMIN') {
+      search_bar_html = (
+        <div className="row">
+          <div className="col s12 m8">
+            <form className="input-field" onSubmit={this._submitSearch}>
+              <i className="material-icons prefix circle left">search</i>
+              <input id="txt-search-users" autoFocus="true" className="browser-default" ref={(input) => this.searchUsers = input} />
+              <label htmlFor="txt-search-users" className="active">Search</label>
+            </form>
+          </div>
+
+        	<Input s={12} m={4} type='select' label="Role" defaultValue={role} onChange={this._handleRoleChange}>
+        		<option value='USER'>Users</option>
+        		<option value='MANAGER'>Managers</option>
+        		<option value='ADMIN'>Admins</option>
+        	</Input>
+        </div>
+      );
+    }
+    else {
+      search_bar_html = (
+        <div className="row">
+          <div className="col s12 m12">
+            <form className="input-field" onSubmit={this._submitSearch}>
+              <i className="material-icons prefix circle left">search</i>
+              <input id="txt-search-users" autoFocus="true" className="browser-default" ref={(input) => this.searchUsers = input} />
+              <label htmlFor="txt-search-users" className="active">Search</label>
+            </form>
+          </div>
+        </div>
+      );
+    }
 
     return (
 <div style={{paddingTop: '25px'}} className="AdminUsers container">
   {modal_edit_html}
 
-  <div className="row">
-    <div className="col s12 m8">
-      <form className="input-field" onSubmit={this._submitSearch}>
-        <i className="material-icons prefix circle left">search</i>
-        <input id="txt-search-users" autoFocus="true" className="browser-default" ref={(input) => this.searchUsers = input} />
-        <label htmlFor="txt-search-users" className="active">Search</label>
-      </form>
-    </div>
-
-  	<Input s={12} m={4} type='select' label="Role" defaultValue={role} onChange={this._handleRoleChange}>
-  		<option value='USER'>Users</option>
-  		<option value='MANAGER'>Managers</option>
-  		<option value='ADMIN'>Admins</option>
-  	</Input>
-  </div>
-
+  {search_bar_html}
 
   <div className="row">
     <div className="col s12">

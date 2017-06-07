@@ -26,8 +26,8 @@ class Home extends Component {
       <div className="row">
         <div className="col s12 m8" style={{paddingTop: '35px'}}>
           <div className="row" style={{marginBottom: '68px', paddingLeft: '15px', paddingRight: '15px'}}>
-            <h2>TRACK IT, PLAY IT, LOVE IT</h2>
-            <span>Calogger is not just an activity tracker, but also a cute buddy for your workouts. Get your tamagotchi app now!</span>
+            <h2>ULLAM AUT. AD MAXIME.</h2>
+            <span>Vivo blanditiis molestiae optio curtus nesciunt confido. Umerus uredo surculus arguo tabella demum confugo saepe. Vomito stultus consequatur coruscus vinitor charisma clarus spoliatio.</span>
           </div>
 
           <div className="row">

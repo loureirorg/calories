@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-materialize';
 
 // api
-import { mealUpdate, mealDelete, mealList } from '../../../reducers';
+import { mealUpdate, mealDelete, mealList, adminMealList } from '../../../reducers';
 
 // libs
 import $ from 'jquery';
@@ -64,7 +64,12 @@ class ModalEdit extends Component {
       id: this.props.record_id
     })
     .then(function (info) {
-      self.props.mealList();
+      if (self.props.location.pathname === '/dashboard') {
+        self.props.mealList();
+      }
+      else {
+        self.props.adminMealList(self.props.admin_meals, {});
+      }
       self.props.modalEditClose();
     })
   }
@@ -81,17 +86,40 @@ class ModalEdit extends Component {
       eat_time: this.time.value
     })
     .then(function (info) {
-      self.props.mealList();
+      if (self.props.location.pathname === '/dashboard') {
+        self.props.mealList();
+      }
+      else {
+        self.props.adminMealList(self.props.admin_meals, {});
+      }
       self.props.modalEditClose();
     })
   }
 
   render() {
+    // admin interface has user information
+    let user_info_html = '';
+    if (this.props.location.pathname.startsWith('/admin/')) {
+      user_info_html = (
+        <div className="row">
+          <div className="input-field col s12 m6">
+            <input id="txt-user-name" type="text" readOnly defaultValue={this.props.user_name} />
+            <label htmlFor="txt-user-name" className="active">User</label>
+          </div>
+          <div className="input-field col s12 m6">
+            <input id="txt-user-email" type="text" readOnly defaultValue={this.props.user_email} />
+            <label htmlFor="txt-user-email" className="active">Email</label>
+          </div>
+        </div>
+      );
+    }
+
     return(
 <div id="modal-edit" ref="modal_edit" className="modal modal-fixed-footer">
   <form>
   <div className="modal-content">
     <h4>Edit Meal</h4>
+    {user_info_html}
     <div className="row">
       <div className="input-field col s12 m6">
         <input id="txt-title" type="text" autoFocus="true" className="validate" defaultValue={this.props.title} ref={(input) => this.title = input} />
@@ -126,7 +154,8 @@ class ModalEdit extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    meal: state.meal
+    meal: state.meal,
+    admin_meals: state.admin_meals,
   }
 }
 
@@ -136,6 +165,7 @@ const mapDispatchToProps = (dispatch) => {
     mealList: () => dispatch(mealList()),
     mealUpdate: (info) => dispatch(mealUpdate(info)),
     mealDelete: (info) => dispatch(mealDelete(info)),
+    adminMealList: (state, args) => dispatch(adminMealList(state, args)),
   }
 }
 

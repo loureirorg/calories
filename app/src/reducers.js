@@ -438,7 +438,7 @@ export function reducerAdminMeals(state = {
   isFetching: false,
   info: false,
   error: false,
-  args: {orderBy: 'date', orderDir: +1, keyword: ''}
+  args: {orderBy: 'eat_date', orderDir: -1, keyword: ''}
 }, action) {
 
   switch (action.type) {
@@ -468,9 +468,10 @@ export function reducerAdminMeals(state = {
 }
 
 const ADMIN_MEAL_LIST_REQUEST = 'ADMIN_MEAL_LIST_REQUEST';
-function requestAdminMealList() {
+function requestAdminMealList(args) {
   return {
-    type: ADMIN_MEAL_LIST_REQUEST
+    type: ADMIN_MEAL_LIST_REQUEST,
+    args: args
   }
 }
 
@@ -482,12 +483,19 @@ function receiveAdminMealList(ajaxReturn) {
   }
 }
 
-/* Ex.: adminMealList() */
-export function adminMealList() {
+export function adminMealList(state, args={}) {
   return function (dispatch) {
-    dispatch(requestAdminMealList());
+    dispatch(requestAdminMealList(args));
 
-    return fetch(window.api_url + '/admin/meals', {
+    // args
+    args = Object.assign({}, state.args, args);
+    let url_args = [];
+
+    if (args['orderBy']) url_args.push('order-by=' + args['orderBy']);
+    if (args['orderDir']) url_args.push('order-dir=' + args['orderDir']);
+    if (args['keyword']) url_args.push('keyword=' + args['keyword']);
+
+    return fetch(window.api_url + '/admin/meals?' + url_args.join('&'), {
         credentials: 'include',
         method: 'GET',
         headers: {

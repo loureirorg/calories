@@ -5,15 +5,29 @@ class AdminsController < ApplicationController
   before_action :set_user, only: [:user_show, :user_update, :user_destroy]
 
   def meal_index
-    @meals = Meal.all
+    @meals = Meal.joins(:user).includes(:user)
 
     # filter
     @meals = @meals.search_for(params[:keyword]) if params[:keyword]
 
+    # sort by: using pg_search, 'users' become 'users_meals'
+    if params[:keyword] && params['order-by'] && params['order-by'].starts_with?('users.')
+      params['order-by'] = 'users_meals.' + params['order-by'][6..-1]
+    end
+
     # sort by
-    params['order-dir'] ||= 1
-    order_dir = params['order-dir'] == '1' ? :asc : :desc
-    @meals = @meals.order(params['order-by'] => order_dir) if params['order-by']
+    order_args = []
+    if params['order-by']
+      params['order-dir'] ||= 1
+      order_dir = params['order-dir'] == '1' ? 'asc' : 'desc'
+      order_args << "#{params['order-by']} #{order_dir}"
+    end
+
+    # default sorting
+    order_args << 'eat_date desc' if params['order-by'] != 'eat_date'
+    order_args << 'eat_time desc' if params['order-by'] != 'eat_time'
+
+    @meals = @meals.reorder(order_args)
 
     # limit
     @meals = @meals.limit(100)

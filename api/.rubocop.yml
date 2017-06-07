@@ -1,4 +1,12 @@
 inherit_from: .rubocop_todo.yml
+Metrics/BlockLength:
+  Max: 200
+Metrics/AbcSize:
+  Max: 41
+Metrics/PerceivedComplexity:
+  Max: 9
+Metrics/CyclomaticComplexity:
+  Max: 8
 AllCops:
   Include:
     - Rakefile
@@ -7,4 +15,5 @@ AllCops:
   Exclude:
     - db/schema.rb
     - Capfile
+    - Guardfile
     - spec/spec_helper.rb

@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  include PgSearch
-
   has_many :meals
 
   # Include default devise modules. Others available are:
@@ -11,7 +9,9 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :daily_calories_max, presence: true, numericality: { only_integer: true }
 
-  pg_search_scope :search_for, against: %i(name email), using: { tsearch: { prefix: true, any_word: true } }
+  # searchable
+  include PgSearch
+  pg_search_scope :search_for, against: [:name, :email], using: { tsearch: { prefix: true, any_word: true } }
 end
 
 class UserSerializer < ActiveModel::Serializer
